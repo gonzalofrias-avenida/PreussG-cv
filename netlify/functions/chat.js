@@ -14,23 +14,7 @@ function checkRateLimit(ip) {
   return true;
 }
 
-exports.handler = async function(event) {
-  if (event.httpMethod !== 'POST') {
-    return { statusCode: 405, body: 'Method Not Allowed' };
-  }
-
-  const ip = (event.headers['x-forwarded-for'] || '').split(',')[0].trim() || 'unknown';
-  if (!checkRateLimit(ip)) {
-    return {
-      statusCode: 429,
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ error: 'Demasiadas solicitudes. Por favor esperá un momento.' })
-    };
-  }
-
-  const { messages } = JSON.parse(event.body);
-
-  const GONZALO_CONTEXT = `Sos el asistente de IA de Gonzalo Frías. Tu rol es responder preguntas sobre su perfil profesional, experiencia, proyectos y personalidad. Respondé siempre en el idioma en que te escriben (español o inglés). Sé cercano, directo y profesional. Máximo 4-5 oraciones por respuesta.
+const GONZALO_CONTEXT = `Sos el asistente de IA de Gonzalo Frías. Tu rol es responder preguntas sobre su perfil profesional, experiencia, proyectos y personalidad. Respondé siempre en el idioma en que te escriben (español o inglés). Sé cercano, directo y profesional. Máximo 4-5 oraciones por respuesta.
 
 PERFIL COMPLETO DE GONZALO FRÍAS:
 
@@ -81,26 +65,45 @@ INSTRUCCIONES:
 - NO inventés información que no esté en este contexto
 - Respondé siempre en el idioma del usuario`;
 
-  const response = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': process.env.ANTHROPIC_API_KEY,
-      'anthropic-version': '2023-06-01'
-    },
-    body: JSON.stringify({
-      model: 'claude-sonnet-4-20250514',
-      max_tokens: 1000,
-      system: GONZALO_CONTEXT,
-      messages: messages
-    })
-  });
+exports.handler = async function(event) {
+  if (event.httpMethod !== 'POST') {
+    return { statusCode: 405, body: 'Method Not Allowed' };
+  }
 
-  const data = await response.json();
+  try {
+    const { messages } = JSON.parse(event.body);
+    console.log('API Key exists:', !!process.env.ANTHROPIC_API_KEY);
+    console.log('Messages received:', messages?.length);
 
-  return {
-    statusCode: 200,
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data)
-  };
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': process.env.ANTHROPIC_API_KEY,
+        'anthropic-version': '2023-06-01'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: GONZALO_CONTEXT,
+        messages: messages
+      })
+    });
+
+    console.log('API response status:', response.status);
+    const data = await response.json();
+    console.log('API response:', JSON.stringify(data).slice(0, 200));
+
+    return {
+      statusCode: 200,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    };
+  } catch(err) {
+    console.log('Error:', err.message);
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ error: err.message })
+    };
+  }
 };
