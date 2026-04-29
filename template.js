@@ -567,9 +567,16 @@
           body: JSON.stringify({ messages: history }),
         });
         const data  = await res.json();
-        const reply = data.content?.[0]?.text || (l ? 'Hubo un error. Por favor intentá de nuevo.' : 'An error occurred. Please try again.');
-        history.push({ role: 'assistant', content: reply });
+        const reply = data.content?.[0]?.text;
         document.getElementById(tid)?.remove();
+        if (!reply) {
+          addMsg(strings.errorMsg, false);
+          messagesEl.innerHTML += faqChipsHTML();
+          messagesEl.scrollTop  = messagesEl.scrollHeight;
+          sendBtn.disabled = false;
+          return;
+        }
+        history.push({ role: 'assistant', content: reply });
         addMsg(reply.replace(/\n/g, '<br/>'), false);
       } catch {
         await delay(800);
