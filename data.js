@@ -29,7 +29,7 @@ const CLIENT_DATA = {
     {
       icon: { type: "emoji", value: "📊" },
       logo: "notverso_logo.jpg",
-      url: "https://notverso.com",
+      url: "https://www.instagram.com/not.verso/",
       nombre: "Not Verso",
       periodo_es: "2025 — Presente · Marketing Digital & E-commerce",
       periodo_en: "2025 — Present · Digital Marketing & E-commerce",
@@ -47,7 +47,7 @@ const CLIENT_DATA = {
     },
     {
       icon: { type: "emoji", value: "⛷️" },
-      logo: "vail_resorts_logo.jpg",
+      logo: "vail_resorts_logo (1).jpg",
       url: "https://www.vailresorts.com",
       nombre: "Vail Resorts",
       periodo_es: "2022 — 2023 · Tourism & Hospitality",
