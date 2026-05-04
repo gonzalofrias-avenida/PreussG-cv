@@ -73,7 +73,7 @@ section { padding: 96px 0; }
 
 /* SKILLS */
 #skills { background: var(--cream); }
-.skills-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; margin-top: 48px; }
+.skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; margin-top: 48px; }
 .skill-card { background: var(--white); border-radius: var(--radius); box-shadow: var(--card-shadow); padding: 32px; }
 .skill-icon { width: 48px; height: 48px; border-radius: 10px; background: #edf2ff; display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 20px; }
 .skill-card h3 { font-size: 17px; font-weight: 700; color: var(--text-dark); margin-bottom: 16px; }

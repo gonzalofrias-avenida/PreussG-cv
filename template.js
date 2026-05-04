@@ -6,7 +6,7 @@
   const C   = D.contacto;
   const EXP = D.experiencia;
   const EDU = D.educacion;
-  const SKL = D.skills;
+  const SKL = D.skills.categorias;
   const SM  = D.sobre_mi;
   const BOT = D.chatbot;
 
@@ -93,6 +93,7 @@
       }).join('');
       return `
     <div class="exp-company fade-in">
+      ${co.url ? `<a href="${co.url}" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">` : ''}
       <div class="exp-company-header">
         ${co.logo ? companyIcon({ type: 'img', src: co.logo, alt: co.nombre }) : companyIcon(co.icon)}
         <div>
@@ -100,6 +101,7 @@
           <div class="company-period">${l ? co.periodo_es : co.periodo_en}</div>
         </div>
       </div>
+      ${co.url ? '</a>' : ''}
       ${roles}
     </div>`;
     }).join('');
@@ -132,7 +134,7 @@
     <div style="text-align:center">
       <h2 class="section-title fade-in" style="margin-bottom:8px">${l ? 'Capacidades Principales' : 'Core Competencies'}</h2>
       <p class="fade-in" style="color:var(--text-mid);font-size:15px;max-width:500px;margin:0 auto 48px">
-        ${l ? 'Habilidades desarrolladas en ventas B2B, expansión de negocios y gestión de proyectos en LATAM.' : 'Skills developed in B2B sales, business expansion and project management in LATAM.'}
+        ${l ? D.skills.subtitulo_es : D.skills.subtitulo_en}
       </p>
     </div>
     <div class="skills-grid">${cards}</div>
@@ -172,7 +174,7 @@
       </div>
       <div style="display:flex;flex-direction:column;gap:24px">
         <div class="sobre-card fade-in">
-          <h3><span class="card-icon">🏉</span> ${l ? 'Deporte &amp; Vida al Aire Libre' : 'Sports &amp; Outdoor Life'}</h3>
+          <h3><span class="card-icon">${SM.icono}</span> ${l ? SM.titulo_es : SM.titulo_en}</h3>
           <p>${l ? SM.deportes_es : SM.deportes_en}</p>
           <p>${l ? SM.deportes2_es : SM.deportes2_en}</p>
           <div class="hobby-tags">${hobbies}</div>
@@ -209,9 +211,7 @@
   <div class="container">
     <p class="section-label fade-in">${l ? 'Contacto' : 'Contact'}</p>
     <h2 class="contact-title fade-in">${l ? 'Hablemos.' : "Let's talk."}</h2>
-    <p class="contact-sub fade-in">${l
-      ? 'Si estás buscando a alguien para impulsar tu negocio, expandir mercados o liderar tu equipo comercial, no dudes en escribirme.'
-      : "If you're looking for someone to grow your business, expand markets or lead your sales team, don't hesitate to reach out."}</p>
+    <p class="contact-sub fade-in">${l ? C.contacto_subtitulo_es : C.contacto_subtitulo_en}</p>
     <div class="contact-buttons fade-in">
       <a href="mailto:${C.email}" class="btn-contact btn-primary">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg>
